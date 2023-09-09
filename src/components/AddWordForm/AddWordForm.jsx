@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { TextField, Button } from '@mui/material';
 import { nanoid } from 'nanoid';
-import { Component } from 'react';
+import { useReducer } from 'react';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -11,50 +11,63 @@ const Form = styled.form`
   width: 400px;
 `;
 
-export class AddWordForm extends Component {
-  state = {
-    ukWord: '',
-    enWord: '',
-  };
+const initialState = { ukWord: '', enWord: '' };
 
-  handleChange = evt => {
-    this.setState({
-      [evt.target.name]: evt.target.value,
+function reducer(state, action) {
+  switch (action.type) {
+    case 'setValue':
+      return { ...state, [action.payload.name]: action.payload.value };
+    case 'reset':
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+export const AddWordForm = ({ addNewWord }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  // const [ukWord, setUkWord] = useState('');
+  // const [enWord, setEnWord] = useState('');
+
+  const handleChange = evt => {
+    dispatch({
+      type: 'setValue',
+      payload: { value: evt.target.value, name: evt.target.name },
     });
   };
 
-  render() {
-    return (
-      <Form
-        onSubmit={evt => {
-          evt.preventDefault();
-          this.props.addNewWord({ id: nanoid(5), ...this.state });
-          this.setState({
-            ukWord: '',
-            enWord: '',
-          });
-        }}
-      >
-        <TextField
-          onChange={this.handleChange}
-          id="enWord"
-          name="enWord"
-          label="English Word"
-          variant="standard"
-          value={this.state.enWord}
-        />
-        <TextField
-          onChange={this.handleChange}
-          id="ukWord"
-          name="ukWord"
-          label="Ukrainian Word"
-          variant="standard"
-          value={this.state.ukWord}
-        />
-        <Button type="submit" variant="outlined">
-          Add word
-        </Button>
-      </Form>
-    );
-  }
-}
+  return (
+    <Form
+      onSubmit={evt => {
+        evt.preventDefault();
+        addNewWord({
+          id: nanoid(5),
+          ukWord: state.ukWord,
+          enWord: state.enWord,
+        });
+        dispatch({ type: 'reset' });
+      }}
+    >
+      <TextField
+        onChange={handleChange}
+        id="enWord"
+        name="enWord"
+        label="English Word"
+        variant="standard"
+        value={state.enWord}
+      />
+      <TextField
+        onChange={handleChange}
+        id="ukWord"
+        name="ukWord"
+        label="Ukrainian Word"
+        variant="standard"
+        value={state.ukWord}
+      />
+      <Button type="submit" variant="outlined">
+        Add word
+      </Button>
+    </Form>
+  );
+};

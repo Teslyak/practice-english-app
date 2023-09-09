@@ -1,48 +1,40 @@
-import { Component } from 'react';
+import { useState, useMemo } from 'react';
 import { AddWordForm } from './AddWordForm/AddWordForm';
 import { Container } from '@mui/material';
 import { WordsList } from './WordsList/WordsList';
 import Filter from './Filter/Filter';
 
-export class App extends Component {
-  state = {
-    words: [],
-    filter: ""
+export const App = () => {
+  const [words, setWords] = useState([]);
+  const [filter, setFilter] = useState('');
+
+  const addWord = newWord => {
+    setWords([...words, newWord]);
   };
 
-  addWord = newWord => {
-    this.setState(prevState => ({
-      words: [...prevState.words, newWord],
-    }));
+  const handleDeleteWord = id => {
+    setWords(words.filter(word => word.id !== id));
   };
 
-  handleDeleteWord = id => {
-    this.setState(prevState => ({
-      words: prevState.words.filter(word => word.id !== id),
-    }));
+  const handleChange = evt => {
+    setFilter(evt.target.value);
   };
 
-  handleChange = (evt) => {
-    this.setState({ filter: evt.target.value });
-  }
-
-  getFilterWords = () => {
-    const normalizedFilter = this.state.filter.toLowerCase().trim();
-    return this.state.words.filter((word) => {
-      return word.ukWord.concat(word.enWord).toLowerCase().includes(normalizedFilter);
+  const getFilterWords = useMemo(() => {
+    const normalizedFilter = filter.toLowerCase().trim();
+    return words.filter(word => {
+      return word.ukWord
+        .concat(word.enWord)
+        .toLowerCase()
+        .includes(normalizedFilter);
     });
-  }
+  }, [filter, words]);
 
-  render() {
-    return (
-      <Container maxWidth="xl">
-        <AddWordForm addNewWord={this.addWord} />
-        <Filter handleChange={this.handleChange}/>
-        <WordsList
-          words={this.getFilterWords()}
-          onDeleteWord={this.handleDeleteWord}
-        />
-      </Container>
-    );
-  }
-}
+  return (
+    <Container maxWidth="xl">
+      <AddWordForm addNewWord={addWord} />
+      <Filter handleChange={handleChange} />
+      <WordsList words={getFilterWords} onDeleteWord={handleDeleteWord} />
+    </Container>
+  );
+};
