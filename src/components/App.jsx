@@ -1,8 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, createContext } from 'react';
 import { AddWordForm } from './AddWordForm/AddWordForm';
 import { Container } from '@mui/material';
 import { WordsList } from './WordsList/WordsList';
 import Filter from './Filter/Filter';
+
+export const WordsContext = createContext(null);
 
 export const App = () => {
   const [words, setWords] = useState([]);
@@ -30,11 +32,21 @@ export const App = () => {
     });
   }, [filter, words]);
 
+  const handelEditWord = editedWord => {
+    setWords(prevState => {
+      return prevState.map(word =>
+        word.id === editedWord.id ? editedWord : word
+      );
+    });
+  };
+
   return (
     <Container maxWidth="xl">
-      <AddWordForm addNewWord={addWord} />
-      <Filter handleChange={handleChange} />
-      <WordsList words={getFilterWords} onDeleteWord={handleDeleteWord} />
+      <WordsContext.Provider value={{ handelEditWord }}>
+        <AddWordForm addNewWord={addWord} />
+        <Filter handleChange={handleChange} />
+        <WordsList words={getFilterWords} onDeleteWord={handleDeleteWord} />
+      </WordsContext.Provider>
     </Container>
   );
 };

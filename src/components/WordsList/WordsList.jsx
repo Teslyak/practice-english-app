@@ -7,6 +7,7 @@ export const WordsList = ({ words, onDeleteWord }) => {
       {words.map(word => (
         <WordsListItem
           key={word.id}
+          id={word.id}
           enWord={word.enWord}
           ukWord={word.ukWord}
           onDeleteWord={() => onDeleteWord(word.id)}
