@@ -1,15 +1,17 @@
 import { TextField } from '@mui/material';
-import React from 'react';
+import { useContext } from 'react';
+import { WordsContext } from 'components/App';
 
-const Filter = ({ handleChange, value }) => {
+const Filter = () => {
+  const { filter, handleChangeFilter } = useContext(WordsContext);
   return (
     <div>
       <TextField
         id="outlined-basic"
         label="search"
         variant="outlined"
-        onChange={handleChange}
-        value={value}
+        onChange={handleChangeFilter}
+        value={filter}
       />
     </div>
   );

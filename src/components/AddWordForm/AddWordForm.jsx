@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { TextField, Button } from '@mui/material';
 import { nanoid } from 'nanoid';
-import { useReducer } from 'react';
+import { useReducer, useContext } from 'react';
+import { WordsContext } from 'components/App';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -25,8 +26,9 @@ function reducer(state, action) {
   }
 }
 
-export const AddWordForm = ({ addNewWord }) => {
+export const AddWordForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { addWord: addNewWord } = useContext(WordsContext);
   // const [ukWord, setUkWord] = useState('');
   // const [enWord, setEnWord] = useState('');
 
