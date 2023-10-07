@@ -11,7 +11,10 @@ const wordSlice = createSlice({
       const delWordId = state.findIndex(el => el.id === action.payload);
       state.splice(delWordId, 1);
     },
-    changeWord(state, action) {},
+    changeWord(state, action) {
+      const index = state.findIndex(el => el.id === action.payload.id);
+      state.splice(index, 1, action.payload);
+    },
   },
 });
 

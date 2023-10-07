@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { TextField } from '@mui/material';
 import { WordsContext } from 'components/App';
 import { useDispatch } from 'react-redux';
-import { deleteWord } from 'redux/wordSlice';
+import { changeWord, deleteWord } from 'redux/wordSlice';
 
 export const WordsListItem = ({ enWord, ukWord, onDeleteWord, id }) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -16,7 +16,9 @@ export const WordsListItem = ({ enWord, ukWord, onDeleteWord, id }) => {
   const handleEdit = () => {
     setIsEditMode(prev => !prev);
     if (edditedUkWord !== ukWord || edditedEnWord !== enWord) {
-      handelEditWord({ id, ukWord: edditedUkWord, enWord: edditedEnWord });
+      dispatch(
+        changeWord({ id, ukWord: edditedUkWord, enWord: edditedEnWord })
+      );
     }
   };
 
