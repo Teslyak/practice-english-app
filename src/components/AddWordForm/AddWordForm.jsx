@@ -5,6 +5,7 @@ import { useReducer, useContext } from 'react';
 import { WordsContext } from 'components/App';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWords } from 'redux/selectors';
+import { addWord } from 'redux/wordSlice';
 
 const Form = styled.form`
   margin: 0 auto;
@@ -30,7 +31,7 @@ function reducer(state, action) {
 
 export const AddWordForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { addWord: addNewWord } = useContext(WordsContext);
+  // const { addWord: addNewWord } = useContext(WordsContext);
 
   const words = useSelector(selectWords);
   const reduxDispatch = useDispatch();
@@ -46,11 +47,13 @@ export const AddWordForm = () => {
     <Form
       onSubmit={evt => {
         evt.preventDefault();
-        addNewWord({
-          id: nanoid(5),
-          ukWord: state.ukWord,
-          enWord: state.enWord,
-        });
+        reduxDispatch(
+          addWord({
+            id: nanoid(5),
+            ukWord: state.ukWord,
+            enWord: state.enWord,
+          })
+        );
         dispatch({ type: 'reset' });
       }}
     >

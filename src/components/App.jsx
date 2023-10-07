@@ -13,14 +13,6 @@ export const App = () => {
 
   const [filter, setFilter] = useState('');
 
-  const addWord = newWord => {
-    setWords([...words, newWord]);
-  };
-
-  const handleDeleteWord = id => {
-    setWords(words.filter(word => word.id !== id));
-  };
-
   const handleChangeFilter = evt => {
     setFilter(evt.target.value);
   };
@@ -49,8 +41,6 @@ export const App = () => {
         handelEditWord,
         getFilterWords,
         handleChangeFilter,
-        handleDeleteWord,
-        addWord,
         words,
         filter,
       }}

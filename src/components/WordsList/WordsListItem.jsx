@@ -1,11 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { TextField } from '@mui/material';
 import { WordsContext } from 'components/App';
+import { useDispatch } from 'react-redux';
+import { deleteWord } from 'redux/wordSlice';
 
 export const WordsListItem = ({ enWord, ukWord, onDeleteWord, id }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [edditedEnWord, setEdditedEnWord] = useState(enWord);
   const [edditedUkWord, setEdditedUkWord] = useState(ukWord);
+
+  const dispatch = useDispatch();
 
   const { handelEditWord } = useContext(WordsContext);
 
@@ -51,7 +55,7 @@ export const WordsListItem = ({ enWord, ukWord, onDeleteWord, id }) => {
         </div>
       </div>
       <button onClick={handleEdit}>{isEditMode ? 'Save' : 'Edit'}</button>
-      <button onClick={onDeleteWord}>Delete</button>
+      <button onClick={() => dispatch(deleteWord(id))}>Delete</button>
     </li>
   );
 };
