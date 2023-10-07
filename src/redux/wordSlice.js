@@ -20,5 +20,3 @@ const wordSlice = createSlice({
 
 export const { addWord, deleteWord, changeWord } = wordSlice.actions;
 export const wordsReducer = wordSlice.reducer;
-
-console.log('hello');
